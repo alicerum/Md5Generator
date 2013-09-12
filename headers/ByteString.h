@@ -18,6 +18,7 @@ class ByteString
 public:
 	ByteString(void);
 	ByteString (const ByteString &bs);
+	ByteString (const string &ansi);
 
 	~ByteString(void);
 

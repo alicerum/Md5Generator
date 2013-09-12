@@ -17,6 +17,11 @@ ByteString::ByteString(const ByteString &bs)
 	memcpy((void*)ptr_.get(), (void*)bs.ptr_.get(), len_);
 }
 
+ByteString::ByteString(const string &ansi)
+{
+	fromAnsi(ansi);
+}
+
 void ByteString::fromHex(const string &hex)
 {
 	if (len_) {
