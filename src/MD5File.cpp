@@ -23,5 +23,22 @@ MD5File::~MD5File()
 
 string MD5File::computeMd5()
 {
+	int bytesToAppend = getBytesToAppend();
+
 	return string("");
+}
+
+int MD5File::getBytesToAppend()
+{
+	// 512 bits
+	int a = fileLength_ % 64;
+
+	// 448 bits
+	if (a >= 56) {
+		return a + 8;
+	}
+
+	// append 64-a bytes to finish the last block and then append 56 bytes
+	// to get 448 bits in a block
+	return 120 - a;
 }

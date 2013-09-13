@@ -10,6 +10,9 @@ class MD5File
 	FILE *f_;
 	int fileLength_;
 
+protected:
+	int getBytesToAppend();
+
 public:
 
 	MD5File(string filePath);
