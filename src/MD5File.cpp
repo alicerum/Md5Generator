@@ -6,7 +6,7 @@
 MD5File::MD5File(string filePath)
 {
 	this->filePath_ = filePath;
-	f_ = fopen(filePath.c_str(), "r");
+	f_ = fopen(filePath.c_str(), "rb");
 
 	if (!f_)
 		throw MD5FileException("Invalid file or file path");
