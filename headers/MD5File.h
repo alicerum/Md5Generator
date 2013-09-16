@@ -12,6 +12,12 @@ class MD5File
 
 protected:
 	int getBytesToAppend();
+	void doPaddings(unsigned char *buf, int len);
+
+	void round1();
+	void round2();
+	void round3();
+	void round4();
 
 public:
 
