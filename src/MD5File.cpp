@@ -1,5 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <inttypes.h>
 
+#include "../headers/ByteString.h"
 #include "../headers/MD5File.h"
 #include "../headers/MD5FileException.h"
 
@@ -56,10 +59,11 @@ string MD5File::computeMd5()
 
 			// time to append file length in bits!
 			if (j < 64) {
-				__int64 fileSizeBits = fileLength_ * 8;
+				uint64_t fileSizeInBits = fileLength_ * 8;
 
 				// dirty hack <3
-				char *cFileSizeInBits = (char*)((void*)&fileSizeInBits);
+				for (int k = 0; k < 8; k++)
+					buf[j+k] = fileSizeInBits >> k*8;
 			}
 		}
 	}
