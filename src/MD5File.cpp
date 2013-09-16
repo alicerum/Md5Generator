@@ -37,8 +37,6 @@ string MD5File::computeMd5()
 
 	int blocksAmount = (fileLength_ + bytesToAppend) / 64 + 1;
 	for (int i = 0; i < blocksAmount; i++) {
-
-		ByteString bsBlock;
 		memset(buf, 0, 64);
 
 		int readen = fread(buf, 64, 64, f_);
@@ -72,7 +70,12 @@ string MD5File::computeMd5()
 		round(x);
 	}
 
-	return string("");
+	ByteString bsA; bsA.fromUint(a_);
+	ByteString bsB; bsA.fromUint(b_);
+	ByteString bsC; bsA.fromUint(c_);
+	ByteString bsD; bsA.fromUint(d_);
+
+	return (bsA + bsB + bsC + bsD).toHex();
 }
 
 int MD5File::getBytesToAppend()

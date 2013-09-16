@@ -25,6 +25,7 @@ public:
 	void fromHex(const string &hex);
 	void fromAnsi(const string &ansi);
 	void fromRaw(int len, char *raw);
+	void fromUint(unsigned int value);
 
 	string toHex();
 	string toAnsi();

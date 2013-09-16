@@ -67,6 +67,20 @@ void ByteString::fromAnsi(const string &ansi)
 	memcpy(ptr_.get(), ansi.c_str(), len_);
 }
 
+void ByteString::fromUint(unsigned int value)
+{
+	if (len_) {
+		ptr_.release();
+		len_ = 0;
+	}
+
+	len_ = 8;
+	ptr_ = unique_ptr<char[]>(new char[len_]);
+
+	for (int i = 0; i < 8; i++)
+		ptr_.get()[i] = value >> i*8;
+}
+
 string ByteString::toHex()
 {
 	string output("");
