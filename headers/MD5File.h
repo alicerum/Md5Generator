@@ -15,15 +15,13 @@ class MD5File
 	uint32_t c_;
 	uint32_t d_;
 
-	uint32_t t_[64];
-
 protected:
 	int getBytesToAppend();
 	void doPaddings(unsigned char *buf, int len);
 
 	void initVector();
 
-	void round(uint *x);
+	void round(uint32_t *x);
 
 public:
 

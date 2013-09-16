@@ -20,6 +20,8 @@ MD5File::MD5File(string filePath)
 	fseek(f_, 0, SEEK_END);
 	fileLength_ = ftell(f_);
 	fseek(f_, 0, SEEK_SET);
+
+	initVector();
 }
 
 MD5File::~MD5File()
@@ -55,7 +57,7 @@ string MD5File::computeMd5()
 
 		// prepare 16 32-bit messages from the block
 		// looks like every block will be divided in two halves and run one after another
-		uint x[16];
+		uint32_t x[16];
 		for (int i = 0; i < 16; i++) {
 			x[i] = buf[i*2] << 8 | buf[i*2+1];
 		}
@@ -128,13 +130,9 @@ void MD5File::initVector()
 	b_ = 0xefcdab89;
 	c_ = 0x98badcfe;
 	d_ = 0x10325476;
-
-	for (int i = 0; i < 64; i++) {
-		t_[i] = pow(2,32)*fabs(sin(i));
-	}
 }
 
-void MD5File::round(uint *x)
+void MD5File::round(uint32_t *x)
 {
 	uint32_t a = a_, b = b_, c = c_, d = d_;
 
