@@ -17,8 +17,9 @@ MD5File::MD5File(string filePath)
 	if (!f_)
 		throw MD5FileException("Invalid file or file path");
 
-	fileLength_ = fseek(f_, SEEK_END, 0);
-	fseek(f_, SEEK_SET, 0);
+	fseek(f_, 0, SEEK_END);
+	fileLength_ = ftell(f_);
+	fseek(f_, 0, SEEK_SET);
 }
 
 MD5File::~MD5File()
@@ -39,7 +40,9 @@ string MD5File::computeMd5()
 	for (int i = 0; i < blocksAmount; i++) {
 		memset(buf, 0, 64);
 
-		int readen = fread(buf, 64, 64, f_);
+		size_t readen = fread(buf, 64, 64, f_);
+		if (!readen)
+			readen = fileLength_;
 
 		if (!readen && i != blocksAmount - 1)
 			throw MD5FileException("Wrong file length, file is probably corrupted");
@@ -84,8 +87,8 @@ int MD5File::getBytesToAppend()
 	int a = fileLength_ % 64;
 
 	// 448 bits
-	if (a >= 56) {
-		return a + 8;
+	if (a < 56) {
+		return 56 - a;
 	}
 
 	// append 64-a bytes to finish the last block and then append 56 bytes
