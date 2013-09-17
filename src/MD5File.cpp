@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include <math.h>
+#include <memory.h>
 
-#include "../headers/ByteString.h"
 #include "../headers/MD5File.h"
 #include "../headers/MD5FileException.h"
 
@@ -19,7 +19,7 @@ MD5File::MD5File(string filePath)
 
 	fseek(f_, 0, SEEK_END);
 	fileLength_ = ftell(f_);
-	fseek(f_, 0, SEEK_SET);
+	rewind(f_);
 
 	initVector();
 }
@@ -38,20 +38,30 @@ string MD5File::computeMd5()
 
 	initVector();
 
+	int totalReaden = 0;
+
 	int blocksAmount = (fileLength_ + bytesToAppend) / 64 + 1;
 	for (int i = 0; i < blocksAmount; i++) {
 		memset(buf, 0, 64);
 
-		size_t readen = fread(buf, 64, 64, f_);
-		if (!readen)
-			readen = fileLength_;
+		size_t readen = fread(buf, 1, 64, f_);
+		if (!readen) {
+			if (i < blocksAmount - 2) {
+				// That coould only be at EOF, if i == blocksAmount-1 or -2
+				throw MD5FileException("Got eof on the non-last block");
+			}
 
+			readen = fileLength_ - totalReaden;
+		}
+
+		totalReaden += readen;
+/*
 		if (!readen && i != blocksAmount - 1)
-			throw MD5FileException("Wrong file length, file is probably corrupted");
+			throw MD5FileException("Readen zero bytes on the block");
 
 		if (readen < 64 && i < blocksAmount - 2)
-			throw MD5FileException("Wrong file length, file is probably corrupted");
-
+			throw MD5FileException("Wrong file length, file is probably corrupted 2");
+*/
 		// do the necessary paddings
 		doPaddings(buf, readen, blocksAmount);
 

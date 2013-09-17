@@ -13,6 +13,8 @@ int main (int argc, char **argv)
 		return 0;
 	}
 
+	cout << "Counting md5 for file '" << argv[1] << "'" << endl;
+
 	try {
 		cout << MD5File(argv[1]).computeMd5() << endl;
 	} catch (MD5FileException &e) {
