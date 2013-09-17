@@ -77,6 +77,8 @@ void ByteString::fromUint(unsigned int value)
 	len_ = 8;
 	ptr_ = unique_ptr<char[]>(new char[len_]);
 
+	// tracting this as little endian
+	// cuz md5 is working with little endian only
 	for (int i = 0; i < 8; i++)
 		ptr_.get()[i] = value >> i*8;
 }

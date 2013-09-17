@@ -17,7 +17,7 @@ class MD5File
 
 protected:
 	int getBytesToAppend();
-	void doPaddings(unsigned char *buf, int len);
+	void doPaddings(unsigned char *buf, int len, int blocksAmount);
 
 	void initVector();
 

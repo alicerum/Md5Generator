@@ -53,25 +53,22 @@ string MD5File::computeMd5()
 			throw MD5FileException("Wrong file length, file is probably corrupted");
 
 		// do the necessary paddings
-		doPaddings(buf, readen);
+		doPaddings(buf, readen, blocksAmount);
 
 		// prepare 16 32-bit messages from the block
-		// looks like every block will be divided in two halves and run one after another
 		uint32_t x[16];
 		for (int i = 0; i < 16; i++) {
-			x[i] = buf[i*2] << 8 | buf[i*2+1];
+			// little endian or big endian? seems to be little endian
+			x[i] = ((uint32_t) buf[i*4+3]) << 24
+					| ((uint32_t) buf[i*4+2]) << 16
+					| ((uint32_t) buf[i*4+1]) << 8
+					| ((uint32_t) buf[i*4]);
 		}
 
 		// You spin me right round, baby
 		// right round like a record, baby
 		// Right round round round
 
-		round(x);
-
-		// another half of the block
-		for (int i = 16; i < 32; i++) {
-			x[i] = buf[i*2] << 8 | buf[i*2+1];
-		}
 		round(x);
 	}
 
@@ -98,11 +95,11 @@ int MD5File::getBytesToAppend()
 	return 120 - a;
 }
 
-void MD5File::doPaddings(unsigned char *buf, int len)
+void MD5File::doPaddings(unsigned char *buf, int len, int blocksAmount)
 {
 	if (len < 64) {
 		int minLim = len;
-		if (len) {
+		if (len || blocksAmount == 1) {
 			buf[len] = 0x80;
 			minLim++;
 		}
