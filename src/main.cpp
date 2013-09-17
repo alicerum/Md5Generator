@@ -1,6 +1,5 @@
 #include <iostream>
 
-#include "../headers/ByteString.h"
 #include "../headers/MD5File.h"
 #include "../headers/MD5FileException.h"
 
