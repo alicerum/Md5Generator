@@ -72,12 +72,12 @@ string MD5File::computeMd5()
 		round(x);
 	}
 
-	ByteString bsA; bsA.fromUint(a_);
-	ByteString bsB; bsA.fromUint(b_);
-	ByteString bsC; bsA.fromUint(c_);
-	ByteString bsD; bsA.fromUint(d_);
+	string sA = int32ToString(a_);
+	string sB = int32ToString(b_);
+	string sC = int32ToString(c_);
+	string sD = int32ToString(d_);
 
-	return (bsA + bsB + bsC + bsD).toHex();
+	return sA + sB + sC + sD;
 }
 
 int MD5File::getBytesToAppend()
@@ -127,6 +127,21 @@ void MD5File::initVector()
 	b_ = 0xefcdab89;
 	c_ = 0x98badcfe;
 	d_ = 0x10325476;
+}
+
+string MD5File::int32ToString(uint32_t value)
+{
+	string s("");
+
+	for (int i = 0; i < 4; i++) {
+		unsigned char c = value >> i*8;
+
+		char a[3];
+		sprintf(a, "%02x", c);
+		s.append(a);
+	}
+
+	return s;
 }
 
 void MD5File::round(uint32_t *x)

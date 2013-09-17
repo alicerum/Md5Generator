@@ -8,7 +8,7 @@ using namespace std;
 
 int main (int argc, char **argv)
 {
-	if (argc < 2 || argc > 2) {
+	if (argc != 2) {
 		cout << "Invalid arguments." << endl
 				<< "Usage: Md5Generator <file path>" << endl;
 		return 0;

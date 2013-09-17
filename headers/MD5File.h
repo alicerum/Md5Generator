@@ -23,6 +23,8 @@ protected:
 
 	void round(uint32_t *x);
 
+	string int32ToString(uint32_t value);
+
 public:
 
 	MD5File(string filePath);
